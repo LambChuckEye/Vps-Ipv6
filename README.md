@@ -47,7 +47,7 @@ ping bilibili.com
 
 ```shell
 # 查看防火墙状态命令：
-firewall-cmd — state
+firewall-cmd --state
 # 停止firewall命令：
 systemctl stop firewalld.service
 # 禁止firewall开机启动命令：
