@@ -1,6 +1,8 @@
 # Vps 转发 Ipv6
 
- 
+- 2021年10月18日09:30:22 更新 V2ray服务部署
+
+
 
 ## 1. VPS 准备部分：
 
@@ -158,3 +160,66 @@ https://lgn6.bjut.edu.cn/，输入学号密码进行登录。
 
 > 若遇到某些应用不能正常访问网络, 可以考虑其是否为2333端口
 
+## 7. V2ray部署
+
+​	搞V2ray服务部署原因是以为clash会自带全局代理，其实并没有，还是得用proxifier。
+
+​	但使用V2ray后，proxifier全局代理后可以翻墙了（？？？）。猜测是因为ssr配置里，socket5的绕行规则需要单独配置，但我没找到。。
+
+​	实际使用上目测和ssr没有显著差别，有待继续观察。
+
+### 1. 服务器部署
+
+​	脚本安装命令：
+
+```shell
+bash <(curl -s -L https://git.io/v2ray.sh)
+```
+
+​	安装过程按照自己偏好选择即可，不再赘述，不想麻烦的直接默认配置即可。
+
+​	安装完成后，可以使用命令调用管理功能。
+
+```shell
+v2ray
+```
+
+​	查看 v2ray 的监听信息，若没有本机 ipv6 地址的监听，则需要进行配置文件的修改。
+
+```shell
+netstat -anp |grep v2ray
+# 配置文件修改
+nano /etc/v2ray/config.json 
+# 文件展示内容
+{
+        "log": {
+                "access": "/var/log/v2ray/access.log",
+                "error": "/var/log/v2ray/error.log",
+                "loglevel": "warning"
+        },
+        "inbounds": [
+                {
+                        "port": 39118,
+                        "protocol": "vmess",
+                        # 添加这个listen数据项
+                        "listen": "0.0.0.0",
+                        "settings": {
+                                "clients": [
+                                        {
+                                                "id": "ef8ca0fc-3bf5-4d3d-b8c8-36c446d1aab2",
+                                                "level": 1,
+                                                "alterId": 0
+                                        }
+                                ]
+                        },
+	...
+}
+```
+
+### 2. 客户端设置
+
+​	直接添加vmess节点即可，手机端小火箭直接添加，pc端使用了clash进行管理，节点配置如下：
+
+![image-20211018103814077](image-20211018103814077.png)
+
+​	测试连接能连通后，还需使用proxifier进行全局代理，记得更改端口和规则，将clash放行。
