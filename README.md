@@ -102,7 +102,8 @@ chmod +x bbr.sh
 
 ### 2. Ipv6登录校园网
 
-https://lgn6.bjut.edu.cn/，输入学号密码进行登录。
+https://lgn6.bjut.edu.cn/
+，输入学号密码进行登录。
 
 ### 3. 设置全局代理
 
